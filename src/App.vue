@@ -1,60 +1,78 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
-  </div>
+    <div class="container text-center">
+        <h1>{{ msg }}</h1>
+        <task-input v-on:save="grava()" v-on:newTask="novaTask()"/>
+        <div class="tarefas" v-for="task of tasks">
+            <task :description="task.description" v-on:clickEvent="remove(description)"/>
+        </div>
+    </div>
 </template>
 
 <script>
+import Input from './components/Cadastro.vue'
+import Task from './components/Task.vue'
+
 export default {
-  name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+    components: {
+        'task-input': Input,
+        'task': Task
+    },
+
+    data () {
+        return {
+            msg: 'Welcome to Your Tasks Crud App',
+            tasks: [],
+            newTask: ""
+        }
+    },
+
+    methods: {
+        remove(description) {
+            console.log('oi')
+            if (localStorage != undefined) {
+                this.tasks = this.tasks.filter(task => {
+                    return task.description != description
+                })
+                localStorage.setItem('tasks', JSON.stringify(this.tasks))
+            }
+        },
+        grava() {
+            if (localStorage != undefined) {
+                this.tasks.push(this.newTask)
+                localStorage.setItem('tasks', JSON.stringify(this.tasks))
+            }
+        },
+        prepareLocalStorage() {
+            if(localStorage.getItem('tasks') == null) {
+                localStorage.setItem('tasks', '[]')
+            }
+            this.tasks = JSON.parse(localStorage.getItem('tasks'));
+        },
+        novaTask(text) {
+            console.log(text)
+        }
+    },
+
+    computed: {
+
+    },
+
+    created() {
+        this.prepareLocalStorage()
+        // if (localStorage != undefined) {
+        //     const previousTasks = JSON.parse(localStorage.getItem('tasks'))
+        //     previousTasks.length > 0 ? this.tasks = previousTasks : this.tasks = ""
+        // }
+        // this.tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
     }
-  }
 }
+
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+
+.container {
+    margin-top: 50px;
 }
 
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
 </style>
