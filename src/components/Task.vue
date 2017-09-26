@@ -1,11 +1,11 @@
 <template>
-    <div class=" mt-50">
-        <div class="task">
+    <div class="mt-25">
+        <div class="task row">
             <p class="lead col-xs-8">
                 {{description}}
             </p>
             <div class="text-right col-xs-4">
-                <button type="button" class="btn btn-default" @click="clickEvent()">Remove</button>
+                <button type="button" class="btn btn-danger" @click="clickEvent()">Remove</button>
             </div>
         </div>
     </div>
@@ -23,10 +23,15 @@ export default {
 </script>
 
 <style lang="css">
-.mt-50 {
-    margin-top: 50px;
+.mt-25 {
+    margin-top: 25px;
 }
 .lead {
     margin-top: 10px;
+    word-wrap: break-word;
+}
+.task {
+    display: flex;
+    align-items: center;
 }
 </style>

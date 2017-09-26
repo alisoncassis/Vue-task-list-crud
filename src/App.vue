@@ -1,69 +1,58 @@
 <template>
     <div class="container text-center">
         <h1>{{ msg }}</h1>
-        <task-input v-on:save="grava()" v-on:newTask="novaTask()"/>
-        <div class="tarefas" v-for="task of tasks">
-            <task :description="task.description" v-on:clickEvent="remove(description)"/>
+        <div class="">
+            <form @submit.prevent="addTask">
+                <div class="form-group">
+                    <label for="description" class="col-sm-2 col-form-label label-input">New Task:</label>
+                    <div class="input-group">
+                        <input autofocus type="text" class="form-control" id="description" placeholder="Task description" v-model="newTask">
+                        <span class="input-group-btn">
+                            <button class="btn btn-secondary" type="submit">Add</button>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="tasks" v-for="task of previousTasks">
+            <task :description="task" @clickEvent="removeTask(task)"/>
         </div>
     </div>
 </template>
 
 <script>
-import Input from './components/Cadastro.vue'
 import Task from './components/Task.vue'
 
 export default {
     components: {
-        'task-input': Input,
         'task': Task
     },
 
     data () {
         return {
-            msg: 'Welcome to Your Tasks Crud App',
+            msg: 'Welcome to Your Tasks App',
             tasks: [],
             newTask: ""
         }
     },
 
     methods: {
-        remove(description) {
-            console.log('oi')
-            if (localStorage != undefined) {
-                this.tasks = this.tasks.filter(task => {
-                    return task.description != description
-                })
-                localStorage.setItem('tasks', JSON.stringify(this.tasks))
-            }
+        removeTask(task) {
+            this.tasks.splice(this.tasks.indexOf(task), 1);
+            localStorage.setItem('tasks', JSON.stringify(this.tasks))
         },
-        grava() {
-            if (localStorage != undefined) {
-                this.tasks.push(this.newTask)
-                localStorage.setItem('tasks', JSON.stringify(this.tasks))
-            }
-        },
-        prepareLocalStorage() {
-            if(localStorage.getItem('tasks') == null) {
-                localStorage.setItem('tasks', '[]')
-            }
-            this.tasks = JSON.parse(localStorage.getItem('tasks'));
-        },
-        novaTask(text) {
-            console.log(text)
+        addTask() {
+            this.tasks.push(this.newTask)
+            localStorage.setItem('tasks', JSON.stringify(this.tasks))
+            this.newTask = ""
         }
     },
 
     computed: {
-
-    },
-
-    created() {
-        this.prepareLocalStorage()
-        // if (localStorage != undefined) {
-        //     const previousTasks = JSON.parse(localStorage.getItem('tasks'))
-        //     previousTasks.length > 0 ? this.tasks = previousTasks : this.tasks = ""
-        // }
-        // this.tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+        previousTasks() {
+            this.tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            return this.tasks
+        }
     }
 }
 
@@ -73,6 +62,11 @@ export default {
 
 .container {
     margin-top: 50px;
+}
+.tasks {
+    background: rgba(236, 236, 236, 0.93);
+    padding: 0 10px;
+    border-radius: 30px;
 }
 
 </style>
