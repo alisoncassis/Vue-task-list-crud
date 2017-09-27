@@ -34,4 +34,7 @@ export default {
     display: flex;
     align-items: center;
 }
+.btn-danger {
+    padding: 6px 8px;
+}
 </style>

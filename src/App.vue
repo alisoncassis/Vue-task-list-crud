@@ -4,7 +4,7 @@
         <div class="">
             <form @submit.prevent="addTask">
                 <div class="form-group">
-                    <label for="description" class="col-sm-2 col-form-label label-input">New Task:</label>
+                    <label for="description" class="col-sm-2 col-form-label label-input mt-10">New Task:</label>
                     <div class="input-group">
                         <input autofocus type="text" class="form-control" id="description" placeholder="Task description" v-model="newTask">
                         <span class="input-group-btn">
@@ -63,9 +63,12 @@ export default {
 .container {
     margin-top: 50px;
 }
+.mt-10 {
+    margin-top: 10px;
+}
 .tasks {
     background: rgba(236, 236, 236, 0.93);
-    padding: 0 10px;
+    padding: 0 15px;
     border-radius: 30px;
 }
 
